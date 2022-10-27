@@ -10,9 +10,10 @@ const userSchema = new mongoose.Schema({
         requred : true,
     },
     age: {
-        type: number,
+        type: Number,
         requred : true,
     }
 });
 
 const userModel = mongoose.model("users", userSchema);
+module.exports = userModel;
