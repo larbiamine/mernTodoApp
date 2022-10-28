@@ -26,8 +26,9 @@ function App() {
       })
     };
     fetch(`http://localhost:5000/editTodo/${id}`, requestOptions)
+    .then(() => { setEditing(false);});
     
-    setEditing(false);
+    
   }
 
   const addTodo = () => {

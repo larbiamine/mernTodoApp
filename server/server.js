@@ -1,17 +1,26 @@
 const express = require('express');
 const app = express();
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const userModel = require("./models/users")
 const todoModel = require("./models/todos")
 
 const cors = require('cors');
+require('dotenv').config();
 
 app.use(express.json());
 app.use(cors());
+ 
+mongoose.connect(process.env.DatabaseConnection);
 
-mongoose.connect("mongodb+srv://aminelarbi:hanndelta14@cluster0.qm0bupw.mongodb.net/mydb?retryWrites=true&w=majority");
-  
+const loginRouter = require('./routes/loginRoutes');
+
+
+app.use('/api', loginRouter);
+
+app.post("/getyey", (req, res) => {
+    console.log(req.body);
+} )
 
 app.get("/getTodos", (req, res) => {
     todoModel.find({}, (err, result) => {
