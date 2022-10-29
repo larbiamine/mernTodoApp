@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import './App.css'
 import Addtodo from './components/Addtodo'
 import TodoList from './components/TodoList'
+import Navbar from './components/Navbar'
+import Login from './components/Login'
 
 function App() {
 
@@ -15,6 +17,17 @@ function App() {
   const [edittodo, setEdittodo] = useState({});
 
   const [checked, setChecked] = useState(false);
+
+  const [logged, setLogged] = useState(false);
+
+
+  useEffect(() => {
+    fetch('/api/checklogged', {method: 'GET'})
+    .then(response => response.json())
+    .then(data => {
+      setLogged(data.logged)
+    })
+  }, [logged]);
 
   const f_editTodo = (id, todo, done) => {
     const requestOptions = {
@@ -47,32 +60,54 @@ function App() {
   }
 
 
+  const CheckLogg = () => {
+    if (!logged) {
+      return(
+        <Login
+        logged = {logged}
+        setLogged = {setLogged}
+        /> 
+      )
+    }else{
+      return(
+        <div>
+          <Addtodo
+            setDone = {setDone}
+            setTodo = {setTodo}
+            addTodo = {addTodo}
+            setEditing = {setEditing}
+            setEdittodo = {setEdittodo}
+            f_editTodo = {f_editTodo}
+            editing = {editing}
+            edittodo = {edittodo}
+          />
+          <TodoList 
+            setAdded = {setAdded}
+            added = {added}
+            setDeleted = {setDeleted}
+            deleted = {deleted}
+            setEditing = {setEditing}
+            setEdittodo = {setEdittodo}
+            editing = {editing}
+            edittodo = {edittodo}
+            setChecked = {setChecked}
+            checked = {checked}
+          />  
+        </div>  
+      )
+    }
+  }
+
 
   return (
     <div className='App'>
 
-      <Addtodo
-        setDone = {setDone}
-        setTodo = {setTodo}
-        addTodo = {addTodo}
-        setEditing = {setEditing}
-        setEdittodo = {setEdittodo}
-        f_editTodo = {f_editTodo}
-        editing = {editing}
-        edittodo = {edittodo}
+       <Navbar
+        logged = {logged}
+        setLogged = {setLogged}
       />
-      <TodoList 
-        setAdded = {setAdded}
-        added = {added}
-        setDeleted = {setDeleted}
-        deleted = {deleted}
-        setEditing = {setEditing}
-        setEdittodo = {setEdittodo}
-        editing = {editing}
-        edittodo = {edittodo}
-        setChecked = {setChecked}
-        checked = {checked}
-      />
+      <CheckLogg/>
+
     </div>
   )
 }
