@@ -9,12 +9,30 @@ import Icon from '@mui/material/Icon';
 
 function Addtodo(props) {
   const [state, setState] = useState("");
+  const [todo, setTodo] = useState("");
+  const [done, setDone] = useState(false);
+
+  const addTodo = () => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({  
+        todo: todo,
+        done: done,
+      })
+    };
+    
+    fetch('http://localhost:5000/createTodo', requestOptions)
+    .then(response => response.json())
+    .then(() =>  props.setAdded(true));
+  }
+
+
   return (
     <Box 
       mt={4}
     >
       <TextField 
-
         helperText="Enter Todo"
         size = "small"
         id="outlined-basic" 
@@ -28,13 +46,10 @@ function Addtodo(props) {
           setState(e.target.value);
           props.edittodo.todo = e.target.value;
           props.setEdittodo(props.edittodo);
-          props.setTodo(e.target.value);
+          setTodo(e.target.value);
         } } 
       />
-
-        
         <Button 
- 
           size="medium" 
           variant="contained" 
           onClick={ () => {
@@ -42,7 +57,7 @@ function Addtodo(props) {
               props.f_editTodo(props.edittodo._id, props.edittodo.todo, props.done);
             }
               else {
-                props.addTodo();
+               addTodo();
               }
             } 
           } 

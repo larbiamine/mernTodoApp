@@ -5,36 +5,56 @@ import TextField from '@mui/joy/TextField';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import { useNavigate } from "react-router-dom";
 
 
-
-function Login(props) {
+function Register(props) {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [cpassword, setCpassword] = useState("");
+    const [email, setEmail] = useState("");
     const [error, setError] = useState("");
 
-    
+    const navigate = useNavigate();
 
-    const login = (username, password) => {
+    const register = (username, password, email) => {
         if (!username || !password) {
-            setError("Username and password are required");
+            setError("Username, password and email are required");
         }else{
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({  
-                  username:  username,
+                  username:  username ,
                   password:  password,
+                  email:  email,
                 })
               };
-            fetch('/api/login', requestOptions)
+            fetch('/api/register', requestOptions)
             .then(response => response.json())
             .then(data => {
-                if(data.msg === 'you have logged in succesfully'){
-                    props.setLogged(true);
-                }else{
-                    setError(data.msg);
+                if(data.msg === 'user registred!!'){
+                    const requestOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({  
+                          username:  username ,
+                          password:  password,
+
+                        })
+                    }
+                    fetch('/api/login', requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.msg === 'you have logged in succesfully'){
+                            props.setLogged(true);
+                            navigate("/");
+                        }
+                    }
+                    )
+                    }else{
+                        setError(data.msg);
                 }
               
             })
@@ -46,7 +66,6 @@ function Login(props) {
   return (
     <div>
         <CssVarsProvider>
-
             <Sheet 
                 sx={{
                     width: 300,
@@ -79,36 +98,71 @@ function Login(props) {
                     }}
                     />
                 <TextField
+                    // html input attribute
+                    name="email"
+                    type="email"
+                    
+                    // pass down to FormLabel as children
+                    label="Email"
+                    onChange={(ee) => {
+                        setEmail(ee.target.value);
+                    }}
+                    />
+                <TextField
                     name="password"
                     type="password"
                     label="Password"
                     onChange={(e) => {
                         setPassword(e.target.value);
+
+                        
+                    }}
+                />
+                <TextField
+                    name="cpassword"
+                    type="password"
+                    label="Confirm password"
+                    onChange={(e) => {
+                        setCpassword(e.target.value)
+                        if (e.target.value != password) {
+                            setError("passwords dont match");
+                        }else{
+                            setError("");
+                            setPassword(e.target.value); 
+                        }
+                        
                     }}
                 />
                 <Typography
                     color='danger'
                     fontSize="sm"
                     sx={{ alignSelf: 'center' }}
-                    >
+                >
                     {error}
 
                 </Typography>
                 <Button 
                     sx={{ mt: 1 /* margin top */ }}
                     onClick={ () => {
-                            login(username,  password);
+                        if (!cpassword) {
+                            setError("Confirm password");
+                        }else{
+                            if (!error) {
+                                register(username, password, email);
+                            }
+                        }
+   
                         }
                     }
                 >
-                    Log in
+                    Register
                 </Button>
                 <Typography
-                    endDecorator={<Link href="/register">Sign up</Link>}
+                    endDecorator={<Link href="/">Login</Link>}
                     fontSize="sm"
                     sx={{ alignSelf: 'center' }}
                     >
-                    Don't have an account?
+                    Already have an account? 
                 </Typography>
             </Sheet>
         </CssVarsProvider>
@@ -116,4 +170,4 @@ function Login(props) {
   )
 }
 
-export default Login
+export default Register

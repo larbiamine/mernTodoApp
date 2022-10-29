@@ -6,10 +6,12 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-
+import { useNavigate } from "react-router-dom";
+import Login from './Login';
 
 
 export default function Navbar(props) {
+
     const logout = () =>{
         fetch('/api/logout', {method: 'GET'})
         .then(() => {
@@ -40,7 +42,7 @@ export default function Navbar(props) {
                     }
                 }}
             >
-                {props.logged ? "Logout" : "Login"}
+                {props.logged ? "Logout" : ""}
             </Button>
         </Toolbar>
         </AppBar>
