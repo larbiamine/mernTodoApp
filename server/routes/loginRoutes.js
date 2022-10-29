@@ -21,24 +21,34 @@ router.get('/checklogged', function (req, res) {
 });
 
 
-router.get('/logout', function (req, res) {
+router.get('/logout', (req, res) => {
     req.session.destroy();
     res.send("logout success!");
   });
 
+router.get('/getusers', async (req, res) =>{
+    const users = await userModel.find();
+    console.log(users);
+    return res.send(users);
+    
+} )  
+
 router.post('/register', async (req, res) => {
     
-    const {email, password} = req.body;
-    if (!email || !password) {
-        return res.json({msg: "password and email are required"}); 
+    const {username, email, password} = req.body;
+    if (!email || !password || !username) {
+        return res.json({msg: "username, password and email are required"}); 
     }
     
-    const user = await userModel.findOne({email: email});
-    if (user) {
+
+    const exitmail = await userModel.findOne({email: email});
+    const existuser = await userModel.findOne({username: username});
+
+    if (exitmail || existuser) {
         return res.json({msg: " user already exists"});
     }
 
-    const newUser = new userModel({email: email, password: password});
+    const newUser = new userModel({username: username, email: email, password: password});
     bcrypt.hash(password, 7, async (err, hash) => {
         if (err) {
             return req.json({msg: "error while storing"})
@@ -54,20 +64,20 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
 
-    const {email, password} = req.body;
+    const {username, password} = req.body;
 
-    if (!email || !password) {
-        return res.json({msg: 'Passord or email not valid'});
+    if (!username || !password) {
+        return res.json({msg: 'Password or username not valid'});
     }
 
-    const user = await userModel.findOne({email: email});
+    const user = await userModel.findOne({username: username});
     if(!user){
         return res.json({msg: 'User Not found'});
     }
 
     const matchPassword = await bcrypt.compare(password, user.password);
     if (matchPassword) {
-        req.session.user = email;
+        req.session.user = username;
         req.session.admin = true;
         return res.json({msg: 'you have logged in succesfully'});
     } else {
