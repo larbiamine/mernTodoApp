@@ -2,9 +2,29 @@ const express = require('express');
 const router = express.Router();
 const userModel = require("../models/users");
 const bcrypt = require('bcrypt');
-const bodyparser = require('body-parser');
+const session = require('express-session');
 
 router.use(express.json()); 
+router.use(session({
+    secret: '2C44-4D44-WppQ385',
+    resave: true,
+    saveUninitialized: true
+}))
+
+router.get('/checklogged', function (req, res) {
+
+    if (!req.session.user) {
+        return res.json({logged: false, user: ""});
+    }else{
+        return res.json({logged: true, user: req.session.user});
+    }
+});
+
+
+router.get('/logout', function (req, res) {
+    req.session.destroy();
+    res.send("logout success!");
+  });
 
 router.post('/register', async (req, res) => {
     
@@ -29,9 +49,7 @@ router.post('/register', async (req, res) => {
         if (savedUserRes) {
             return res.json({msg: "user registred!!"});
         }
-
     } )
-    
 })
 
 router.post('/login', async (req, res) => {
@@ -49,6 +67,8 @@ router.post('/login', async (req, res) => {
 
     const matchPassword = await bcrypt.compare(password, user.password);
     if (matchPassword) {
+        req.session.user = email;
+        req.session.admin = true;
         return res.json({msg: 'you have logged in succesfully'});
     } else {
         return res.json({msg: 'invalid password!!!'});

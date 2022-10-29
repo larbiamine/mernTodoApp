@@ -19,7 +19,10 @@ const loginRouter = require('./routes/loginRoutes');
 app.use('/api', loginRouter);
 
 app.post("/getyey", (req, res) => {
-    console.log(req.body);
+    if (req.isAuthenticated()) {
+        console.log("logged");
+    }
+    
 } )
 
 app.get("/getTodos", (req, res) => {
