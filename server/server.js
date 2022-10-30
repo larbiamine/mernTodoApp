@@ -10,7 +10,8 @@ require('dotenv').config();
 
 app.use(express.json());
 
-mongoose.connect(process.env.DatabaseConnection);
+// mongoose.connect(process.env.DatabaseConnection);
+mongoose.connect("mongodb+srv://aminelarbi:hanndelta14@cluster0.qm0bupw.mongodb.net/mydb?retryWrites=true&w=majority");
 
 const loginRouter = require('./routes/loginRoutes');
 
