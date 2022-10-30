@@ -3,12 +3,16 @@ const mongoose = require("mongoose");
 const todoSchema = new mongoose.Schema({
     todo: {
         type: String,
-        requred : true,
+        required : true,
     },
     done: {
         type: Boolean,
-        requred : true,
+        required : true,
     },
+    user: {
+        type: String,
+        required : true,
+    }
 
 });
 

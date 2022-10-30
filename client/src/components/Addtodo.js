@@ -1,26 +1,28 @@
 import React, {useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Stack  from '@mui/material/Stack';
-import Checkbox from '@mui/material/Checkbox';
+// import Stack  from '@mui/material/Stack';
+// import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
-import { textAlign } from '@mui/system';
-import Icon from '@mui/material/Icon';
+// import { textAlign } from '@mui/system';
+// import Icon from '@mui/material/Icon';
 
 function Addtodo(props) {
   const [state, setState] = useState("");
   const [todo, setTodo] = useState("");
-  const [done, setDone] = useState(false);
+
 
   const addTodo = () => {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
       body: JSON.stringify({  
+        user: props.currentuser,
         todo: todo,
-        done: done,
+        done: false,
       })
-    };
+    }; 
     
     fetch('http://localhost:5000/createTodo', requestOptions)
     .then(response => response.json())

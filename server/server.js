@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-
+const cookieParser = require('cookie-parser');
 const userModel = require("./models/users")
 const todoModel = require("./models/todos")
 
@@ -9,34 +9,39 @@ const cors = require('cors');
 require('dotenv').config();
 
 app.use(express.json());
-app.use(cors());
- 
+
 mongoose.connect(process.env.DatabaseConnection);
 
 const loginRouter = require('./routes/loginRoutes');
 
+app.use(cookieParser());
+const session = require('express-session');
+app.use(session({
+    secret: '2C44-4D44-WppQ385',
+    resave: true,
+    saveUninitialized: true
+}))
  
+app.use(cors());
 app.use('/api', loginRouter);
 
-app.post("/getyey", (req, res) => {
-    if (req.isAuthenticated()) {
-        console.log("logged");
-    }
-    
-} )
-
 app.get("/getTodos", (req, res) => {
-    todoModel.find({}, (err, result) => {
+    todoModel.find({user: req.session.user}, (err, result) => {
         if (err) {
-            res.json(err);
+          res.json(err);
         }else{
-            res.json(result)
+          var data = {
+            result : result,
+            usa : req.session.user
+          } 
+          res.json(data)
         }
-    } )
+    } ) 
 } )
 
 
 app.post("/createTodo", async (req, res) => {
+    console.log(req.session.user);
     const todo = req.body;
     const newTodo = new todoModel(todo);
     await newTodo.save();

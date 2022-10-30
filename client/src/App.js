@@ -26,6 +26,7 @@ function App() {
 
   const [logged, setLogged] = useState(false);
 
+  const [currentuser, setCurrentuser] = useState("");
   
   useEffect(() => {
     fetch('/api/checklogged', {method: 'GET'})
@@ -65,6 +66,7 @@ function App() {
       return(
         <div>
           <Addtodo
+            currentuser = {currentuser}
             setAdded = {setAdded}
             setEditing = {setEditing}
             setEdittodo = {setEdittodo}
@@ -73,6 +75,7 @@ function App() {
             edittodo = {edittodo}
           />
           <TodoList 
+            setCurrentuser = {setCurrentuser}
             setAdded = {setAdded}
             added = {added}
             setDeleted = {setDeleted}

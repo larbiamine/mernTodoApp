@@ -41,14 +41,14 @@ function TodoList(props) {
       response => response.json()
     ).then(
       data => {
-        setTodoList(data);
+        setTodoList(data.result);
         props.setAdded(false);
         props.setDeleted(false);
         props.setChecked(false);
-
+        props.setCurrentuser(data.usa)
       }
     )
-    // eslint-disable-next-line
+
   }, [props.added, props.deleted, props.checked]);
 
 

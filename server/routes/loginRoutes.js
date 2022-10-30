@@ -2,14 +2,8 @@ const express = require('express');
 const router = express.Router();
 const userModel = require("../models/users");
 const bcrypt = require('bcrypt');
-const session = require('express-session');
 
 router.use(express.json()); 
-router.use(session({
-    secret: '2C44-4D44-WppQ385',
-    resave: true,
-    saveUninitialized: true
-}))
 
 router.get('/checklogged', function (req, res) {
 
@@ -79,6 +73,7 @@ router.post('/login', async (req, res) => {
     if (matchPassword) {
         req.session.user = username;
         req.session.admin = true;
+        req.session.save()
         return res.json({msg: 'you have logged in succesfully'});
     } else {
         return res.json({msg: 'invalid password!!!'});
