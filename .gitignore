@@ -5,4 +5,4 @@
 ./client/build
 ./server.ps1
 ./client.ps1
-
+/client/.env
