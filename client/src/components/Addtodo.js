@@ -79,12 +79,9 @@ function Addtodo(props) {
                 } 
               >
               {props.editing ? "Save" :  "Add"}
-
             </Button>
             </Grid>
           </Grid>
-
-
     </Box>
     );
 }

@@ -3,5 +3,6 @@
 ./client/node_modules
 ./server/build
 ./client/build
-
+./server.ps1
+./client.ps1
 
