@@ -55,10 +55,10 @@ function TodoList(props) {
 
   return (
       <TableContainer component={Paper}>
-        <Table align="center" sx={{ maxWidth: 100 }} aria-label="simple table">
+        <Table align="center" sx={{ maxWidth: "55%" }} aria-label="simple table">
           <TableHead>
             <TableRow>
-                <TableCell align="center">Todo</TableCell>
+                <TableCell               >Todo</TableCell>
                 <TableCell align="center">Done</TableCell>
                 <TableCell align="center">Edit</TableCell>
                 <TableCell align="center">Delete</TableCell>
@@ -71,7 +71,7 @@ function TodoList(props) {
                 return (
                   <>
                     <TableRow key={todo._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} ></TableRow>
-                      <TableCell sx={{ width: "50%" }} align="right">
+                      <TableCell sx={{ width: "100%" }} align="left">
                         {todo.todo} 
                       </TableCell>
                       <TableCell align="right">

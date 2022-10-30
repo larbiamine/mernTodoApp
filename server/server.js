@@ -41,7 +41,6 @@ app.get("/getTodos", (req, res) => {
 
 
 app.post("/createTodo", async (req, res) => {
-    console.log(req.session.user);
     const todo = req.body;
     const newTodo = new todoModel(todo);
     await newTodo.save();
